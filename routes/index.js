@@ -58,11 +58,14 @@ router.get('/bird/:_id', function(req, res, next){
   Bird.findOne( { _id: req.params._id })
     .then( (doc) => {
       if (doc) {
-        doc.datesSeen = doc.datesSeen.sort( function(a, b) {
-          if (a && b) {
-            return a.getTime() - b.getTime();
-          }
-        });
+
+        // If array is unsorted or not sorted in desired way, can sort in code
+        /* doc.datesSeen = doc.datesSeen.sort( function(a, b) {
+           if (a && b) {
+             return a.getTime() - b.getTime();
+           }
+         });   */
+
         res.render('bird', { bird: doc });
       } else {
         res.status(404);
@@ -72,14 +75,14 @@ router.get('/bird/:_id', function(req, res, next){
     .catch( (err) => {
       next(err);
     });
-
 });
 
 
 /* POST to add a new sighting for a bird. Bird _id expected in body */
 router.post('/addSighting', function(req, res, next){
 
-  Bird.findOneAndUpdate( {_id : req.body._id}, {$push : { datesSeen : req.body.date } }, {runValidators : true})
+  // Push new date onto datesSeen array and then sort in date order.
+  Bird.findOneAndUpdate( {_id : req.body._id}, { $push : { datesSeen : { $each: [req.body.date], $sort: 1} } }, {runValidators : true})
     .then( (doc) => {
       if (doc) {
         res.redirect('/bird/' + req.body._id);   // Redirect to this bird's info page

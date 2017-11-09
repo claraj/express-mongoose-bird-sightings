@@ -52,6 +52,8 @@
 
   <div class="sighting-list">
 
+    <P>Number of sightings: {{length bird.datesSeen}}</p>
+
     <div class="sighting">
       {{#each bird.datesSeen}}
         <p>{{formatDate this}}</p>

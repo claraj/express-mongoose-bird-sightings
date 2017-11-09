@@ -7,6 +7,11 @@ function formatDate(date) {
   return m.parseZone().format('dddd, MMMM Do YYYY, h:mm a');
 }
 
+function length(array) {
+  return array.length;
+}
+
 module.exports = {
-  formatDate : formatDate
+  formatDate : formatDate,
+  length: length
 }
